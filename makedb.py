@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship, joinedload, subqueryload, Session
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import pandas as pd
+import numpy as np
 
 CATALOG_FILE = 'catalog.xlsx'
 
@@ -10,7 +11,7 @@ CATALOG_FILE = 'catalog.xlsx'
 	Configuration
 """
 Base = declarative_base()
-engine = create_engine('postgresql://localhost/course_catalog')
+engine = create_engine('postgresql://localhost/catalog')
 # start session
 Session = sessionmaker()
 Session.configure(bind=engine)
@@ -27,14 +28,12 @@ class Course(Base):
 	department = Column(String)
 	long_title = Column(String)
 	description = Column(String)
+	distribution = Column(String)
+	prerequisites = Column(String)
+	course_type = Column(String)
+	grade_mode = Column(String)
+	credit_hours = Column(String)
 	
-	def __init__(self, course_coude, title, department, long_title, description):
-		self.course_code = course_coude
-		self.title = title
-		self.department = department
-		self.long_title = long_title
-		self.description = description
-		
 	def __repr__(self):
 		"""
 		Define the representation of the database.
@@ -42,7 +41,6 @@ class Course(Base):
 		"""
 		return "<Course(courde code = '%s', title = '%s', department = '%s'), description = '%s'>" % (
 			self.course_code, self.title, self.department, self.description)
-	
 
 
 def read_excel(f):
@@ -53,7 +51,8 @@ def read_excel(f):
 	:return df: the dataframe of parsed excel file
 	"""
 	
-	catalog = pd.read_excel(f)  # type: pandas.core.frame.DataFrame
+	catalog = pd.read_excel(f, na_values='null', keep_default_na = False).fillna("")  # type: pandas.core.frame.DataFrame
+	
 	return catalog
 
 
@@ -67,11 +66,16 @@ def add_catalog_to_db(session, catalog):
 	:return:
 	"""
 	
-	course_code = None
-	title = None
-	department = None
-	long_title = None
-	description = None
+	course_code = ""
+	title = ""
+	department = ""
+	long_title = ""
+	description = ""
+	credit_hours = ""
+	distribution_group = ""
+	prerequisites = ""
+	course_type = ""
+	grade_mode = ""
 	
 	course_list = []
 	
@@ -79,23 +83,36 @@ def add_catalog_to_db(session, catalog):
 	for id, row in catalog.iterrows():
 		# Read value
 		for index, value in row.iteritems():
-			if (index == u"Code"):
+			if (index == u"course_code"):
 				course_code = value
-			elif (index == u"Title"):
+			elif (index == u"title"):
 				title = value
-			elif (index == u"Department"):
+			elif (index == u"department"):
 				department = value
-			elif (index == u"Long Title"):
+			elif (index == u"long_title"):
 				long_title = value
-			elif (index == u"Description"):
+			elif (index == u"description"):
 				description = value
+			elif (index == u"credit_hours"):
+				credit_hours = value
+			elif (index == u"distribution_group"):
+				distribution_group = value
+			elif (index == u"prerequisites"):
+				prerequisites = value
+			elif (index == u"course_type"):
+				course_type = value
+			elif (index == u"grade_mode"):
+				grade_mode = value
 			else:
 				print index, value
 				continue
 		
+		
 		# Crease course instance
 		course = Course(course_code=course_code, title=title,
-		                department=department, long_title=long_title, description=description)
+		                department=department, long_title=long_title, description=description,
+		                credit_hours = credit_hours, distribution = distribution_group, prerequisites = prerequisites,
+		                course_type = course_type, grade_mode = grade_mode)
 		course_list.append(course)
 	
 	# Add course instances into the database
@@ -104,7 +121,7 @@ def add_catalog_to_db(session, catalog):
 
 def test():
 	print session.query(Course).first()
-		
+
 def start():
 	# create table
 	Base.metadata.create_all(engine)
@@ -120,8 +137,6 @@ def start():
 
 def main():
 	start()
-	test()
+	# test()
 	
-
-
-main();
+# main()
