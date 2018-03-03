@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 import pandas as pd
 import numpy as np
 
-CATALOG_FILE = 'catalog.xlsx'
+CATALOG_FILE = 'data/catalog.xlsx'
 
 """
 	Configuration
@@ -33,7 +33,7 @@ class Course(Base):
 	course_type = Column(String)
 	grade_mode = Column(String)
 	credit_hours = Column(String)
-	
+
 	def __repr__(self):
 		"""
 		Define the representation of the database.

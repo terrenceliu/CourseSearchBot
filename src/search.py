@@ -1,10 +1,9 @@
-from sqlalchemy import Integer, Column, create_engine, ForeignKey, String
-from sqlalchemy.orm import relationship, joinedload, subqueryload, Session
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
 import sqlalchemy
-from makedb import Course
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 import predict
+from makedb import Course
 
 """
 	Class
@@ -141,7 +140,7 @@ def get_course_by_predict(input):
 		course_code = res[0]
 		prob = res[1]
 		course = query.filter(Course.course_code == course_code).first()
-
+		
 		if course == None:
 			continue
 		else:
