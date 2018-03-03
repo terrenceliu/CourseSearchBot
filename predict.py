@@ -7,7 +7,8 @@ import logging
 
 def predict_course(model, query_list, n=10):
 	"""
-	Given a pretrianed model and a list of query words, return the top-n related course with cosine similarity
+	Given a pretrianed model and a list of query words, return the top-n related course with cosine similarity.
+	If the keyword is not in the key set, return None.
 	:param n: get top-n related course; default n = 5
 	:param model: a doc2vec model
 	:param query_list: a list of query word
@@ -26,13 +27,13 @@ def predict_course(model, query_list, n=10):
 		strlist = query_list.split(" ")
 		v = [model[i] for i in strlist]
 		return matutils.unitvec(array(v).mean(axis=0))
+	
 	try:
 		sum_vec = get_vector(model, query_list)
 	except KeyError as e:
 		print 'Can\'t find key.'
 		print e
-		err = [('null', 0)]
-		return err
+		return None
 	result = model.docvecs.most_similar([sum_vec], topn=n)
 	course_code_result = []
 	subject_code_result = []

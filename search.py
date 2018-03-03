@@ -133,6 +133,9 @@ def get_course_by_predict(input):
 	
 	search_result = predict.predict(input)      # [(course_code: str, similarity: double)]
 	
+	if search_result == None:
+		return "Can't locate any class with keyword \'" + user_input + "\'. Try another key word?"
+	
 	course_list = []        # [(course: Course, similarity: double)]
 	for res in search_result:
 		course_code = res[0]
