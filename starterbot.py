@@ -48,17 +48,16 @@ def handle_command(command, channel):
 	# Default response is help text for the user
 	default_response = "Not sure what you mean. Try *{}*.".format(EXAMPLE_COMMAND)
 
-	print 'cmd = ' + command
-	print 'channel = ' + channel
-
 	# Finds and executes the given command, filling in response
 	response = None
+	
 	# This is where you start to implement more commands!
 	if command.startswith(EXAMPLE_COMMAND):
 		response = "Sure...write some more code then I can do that!"
 	elif command.startswith("search"):
-		response = search.get_course_by_code(command.strip("search"))
-	
+		response = search.get_course_by_code(command.replace('search', ''))
+	elif command.startswith("explore"):
+		response = search.get_course_by_predict(command.replace('explore', ''))
 	# Sends the response back to the channel
 	slack_client.api_call(
 		"chat.postMessage",

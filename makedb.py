@@ -121,7 +121,7 @@ def add_catalog_to_db(session, catalog):
 
 def test():
 	print session.query(Course).first()
-
+	
 def start():
 	# create table
 	Base.metadata.create_all(engine)
