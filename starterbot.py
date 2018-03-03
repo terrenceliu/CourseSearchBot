@@ -2,6 +2,8 @@ import os
 import time
 import re
 from slackclient import SlackClient
+import search
+
 
 # instantiate Slack client
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
@@ -54,8 +56,9 @@ def handle_command(command, channel):
 	# This is where you start to implement more commands!
 	if command.startswith(EXAMPLE_COMMAND):
 		response = "Sure...write some more code then I can do that!"
-	if command.startswith("calc"):
-		response = "Test."
+	elif command.startswith("search"):
+		response = search.get_course_by_code(command.strip("search"))
+	
 	# Sends the response back to the channel
 	slack_client.api_call(
 		"chat.postMessage",

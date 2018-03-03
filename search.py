@@ -23,7 +23,7 @@ class Util():
 """
 	Configuration
 """
-engine = create_engine('postgresql://localhost/course_catalog')
+engine = create_engine('postgresql://localhost/catalog')
 
 # start session
 Session = sessionmaker()
@@ -50,12 +50,24 @@ def get_course_by_code(input):
 	:return: a course instance
 	:rtype: Course
 	"""
-	
 	res = None
+	
+	# clean input
+	input = util.strip_whitespace(input)
+	
 	res = query.filter(Course.course_code == input).first()
-	# print res
+	print res
+	return res
 	
-	
+def get_course_by_key_words(input):
+	"""
+	Given the input string (key words), return the course
+	:param input: the input course code
+	:type input: str
+	:return: a course instance
+	:rtype: Course
+	"""
+
 def test():
 	# course = get_course_by_code('COMP121')
 	print util.strip_whitespace(" hello world  ")
