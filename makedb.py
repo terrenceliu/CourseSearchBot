@@ -28,6 +28,13 @@ class Course(Base):
 	long_title = Column(String)
 	description = Column(String)
 	
+	def __init__(self, course_coude, title, department, long_title, description):
+		self.course_code = course_coude
+		self.title = title
+		self.department = department
+		self.long_title = long_title
+		self.description = description
+		
 	def __repr__(self):
 		"""
 		Define the representation of the database.
@@ -35,6 +42,7 @@ class Course(Base):
 		"""
 		return "<Course(courde code = '%s', title = '%s', department = '%s'), description = '%s'>" % (
 			self.course_code, self.title, self.department, self.description)
+	
 
 
 def read_excel(f):
