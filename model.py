@@ -51,12 +51,12 @@ def get_course_by_code(input):
 	:rtype: Course
 	"""
 	
-	#
 	
 	res = None
 	res = query.filter(Course.course_code == input).first()
 	# print res
-
+	
+	
 def test():
 	# course = get_course_by_code('COMP121')
 	print util.strip_whitespace(" hello world  ")
