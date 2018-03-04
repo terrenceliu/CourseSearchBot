@@ -43,6 +43,7 @@ class Course(Base):
 			self.course_code, self.title, self.department, self.description)
 
 
+
 def read_excel(f):
 	"""
 	

@@ -7,7 +7,7 @@ from slackclient import SlackClient
 import search
 
 # instantiate Slack client
-slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
+slack_client = SlackClient('xoxb-324199465218-gcrRq0sst1OEcs0Y3EDZOCaJ')
 # starterbot's user ID in Slack: value is assigned after the bot starts up
 starterbot_id = None
 
@@ -55,10 +55,10 @@ def handle_command(command, channel):
 	# This is where you start to implement more commands!
 	if command.startswith(EXAMPLE_COMMAND):
 		response = "Sure...write some more code then I can do that!"
-	elif command.startswith("search"):
-		response = search.get_course_by_code(command.replace('search', ''))
-	elif command.startswith("explore"):
-		response = search.get_course_by_predict(command.replace('explore', ''))
+	elif command.startswith("-s"):
+		response = search.get_course_by_code(command.replace('-s', ''))
+	elif command.startswith("-e"):
+		response = search.get_course_by_predict(command.replace('-e', ''))
 	# Sends the response back to the channel
 	slack_client.api_call(
 		"chat.postMessage",
